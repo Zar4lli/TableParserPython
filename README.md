@@ -1,7 +1,7 @@
 <h1 align="right">#TablePythonParser</h1>
 <h4 align="left">This script is needed to parse information from web pages. The data can be immediately used in text format or in an excel.</h4>
 
-<p align="center"> <img src="https://im2.ezgif.com/tmp/ezgif-2-b4ad53f363.gif" width="100%"> </p>
+<p align="center"> <img src="https://github.com/Zar4lli/TableParserPython/blob/main/gifMaker.gif" width="100%"> </p>
 
 
 ## Install
