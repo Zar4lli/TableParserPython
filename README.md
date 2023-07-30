@@ -62,11 +62,11 @@ Here are the main settings that will come in handy in your work with this script
 > <p>Your invented names for excel tabs </p>
 > <p>!! Name should be less 31 character !! </p>
 
-> **bUseCustomStartRow = False**
-> <p>Whether to use your custom blank at the beginning of the table/txt?</p>
-
 > **bUseHeaderTable = True**
 > <p>Whether to use the automatically generated form of the beginning of the table/txt?</p>
+
+> **bUseCustomStartRow = False**
+> <p>Whether to use your custom blank at the beginning of the table/txt?</p>
 
 > **StartRow = ["№", "id","name", "age","last name", "last seen"]**
 > <p>Start row in all Sheets in excel or text files. </p>
