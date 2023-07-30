@@ -28,11 +28,11 @@ After successfully installing python, you need to install packages on the comman
 The global script settings(config) located in *HtmlTableParser.py*.
 Here are the main settings that will come in handy in your work with this script.
 
->**keysTableHead = ["thead","tr","th"] # Max 2 keys. Needed to looping in tHead table. [items, keys]**
+>**keysTableHead = ["thead","tr","th"] # Max 3 keys. Needed to looping in tHead table. [items, keys]**
 > <p># These keys are needed for web page parsing (bUseHeaderTable). </p>
 > <p>!! Max 3 keys. !!</p>
 
->**keysTableBody = ["tbody","tr","td"] # Max 2 keys. Needed to looping in tBody table. [items, keys]**
+>**keysTableBody = ["tbody","tr","td"] # Max 3 keys. Needed to looping in tBody table. [items, keys]**
 > <p> These keys are needed for web page parsing. </p>
 > <p>!! Max 3 keys. !!</p>
 
