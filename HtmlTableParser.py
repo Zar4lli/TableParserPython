@@ -15,14 +15,14 @@ urls = ["https://pk-vo.mgpu.ru/pk/dictionary/competitive-group-rating?competitiv
 bSaveHtml = False # Save html's? (False/True)
 
 bSaveDataInTxtFormat = False # Save out data in txt files? (False/True)
-bSaveDataInExcelFormat = False # Save out data in exel files? (False/True)
+bSaveDataInExcelFormat = True # Save out data in exel files? (False/True)
 namesSheets = ["Sheet_1",
                "Sheet_2",
                "Sheet_3",
                "Sheet_5",
                "Sheet_6"] # Name of sheet will was smallest 31 character
 
-bUseHeaderTable = True # Use auto headerer in a table for StartRow? (False/True)
+bUseHeaderTable = False # Use auto headerer in a table for StartRow? (False/True)
 bUseCustomStartRow = False # Use custom StartRow (config)? (False/True)
 StartRow = [ 
         "№",
@@ -195,7 +195,7 @@ def memorySheetsSave(index):
         df = pd.DataFrame(listExel, columns=StartRow) # index=['one', 'two', 'three']
     elif bUseHeaderTable == True:
         startRowExel = converterToExelData(startData)
-        df = pd.DataFrame(listExel, columns=startRowExel)
+        df = pd.DataFrame(listExel, columns=['' for i in range(MaxCountItemsInRow)])
     else:
         df = pd.DataFrame(listExel)
 
@@ -212,11 +212,9 @@ def writeSheetsToExcel():
     for sheet in dataSheets:
         if (bUseCustomStartRow == True) or (bUseHeaderTable == True):
             startRowExel = converterToExelData(startData)
-            print(startRowExel)
-            
-            sheet.to_excel(writer, sheet_name=namesSheets[index],index=False, columns=startRowExel[index])
+            sheet.to_excel(writer, sheet_name=namesSheets[index],index=False, columns=StartRow)
         else:
-            sheet.to_excel(writer, sheet_name=namesSheets[index],index=False, columns=None)
+            sheet.to_excel(writer, sheet_name=namesSheets[index],index=False)
         index += 1
     writer._save()
 
