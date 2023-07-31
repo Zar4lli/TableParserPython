@@ -1,49 +1,45 @@
-from bs4 import BeautifulSoup
-import requests
-import time
-import pandas as pd
-
 ## config start
-txtFileName = str(time.time_ns())+'_output.txt' # Name txt file!
-excelFileName = str(time.time_ns())+'_output'+'.xlsx' # Name exel file!
 
-keysTableHead = ["table","thead","tr","td"] # keys to find the head table row
+keysTableHead = ["table","thead","tr","th"] # keys to find the head table row
 keysTableBody = ["tr","td"] # keys to find the body table row
 
-MainIdentifyPos = 2 # Main identificator position around  (Started with 1)
-MaxCountItemsInRow = 13 # Max items in row in parse table
+MainIdentifyPos = 3 # Main identificator position around  (Started with 1)
+MaxCountItemsInRow = 15 # Max items in row in parse table
 
-bNetworkHtml = False
-urls = ["TestTable"]
+bNetworkHtml = True
+urls = ["https://pk-vo.mgpu.ru/pk/dictionary/competitive-group-rating?competitiveGroupId=3067",
+        "https://pk-vo.mgpu.ru/pk/dictionary/competitive-group-rating?competitiveGroupId=3053",
+        "https://pk-vo.mgpu.ru/pk/dictionary/competitive-group-rating?competitiveGroupId=3054",
+        "https://pk-vo.mgpu.ru/pk/dictionary/competitive-group-rating?competitiveGroupId=3048"]
 
 bSaveHtml = False # Save html's? (False/True)
 
 bSaveDataInTxtFormat = False # Save out data in txt files? (False/True)
-bSaveDataInExcelFormat = True # Save out data in exel files? (False/True)
+bSaveDataInExcelFormat = False # Save out data in exel files? (False/True)
 namesSheets = ["Sheet_1",
                "Sheet_2",
                "Sheet_3",
-               "Sheet_4",
-               "Sheet_4"] # Name of sheet will was smallest 31 character
+               "Sheet_5",
+               "Sheet_6"] # Name of sheet will was smallest 31 character
 
+bUseHeaderTable = True # Use auto headerer in a table for StartRow? (False/True)
 bUseCustomStartRow = False # Use custom StartRow (config)? (False/True)
-bUseHeaderTable = False # Use auto headerer in a table for StartRow? (False/True)
 StartRow = [ 
         "№",
-        "НОМЕР ЗАЯВЛЕНИЯ",
-        "СНИЛС/УИА",
-        "ЗАЧИСЛЕНИЕ БЕЗ ВИ",
-        "СУММА (ВИ+ИД)",
-        "СУММА (ВИ)",
-        "ИД",
-        "ОБЩЕСТВОЗНАНИЕ",
-        "РУССКИЙ ЯЗЫК",
-        "МАТЕМАТИКА",
-        "ПРЕИМУЩЕСТВЕННОЕ ПРАВО НА ПОСТУПЛЕНИЕ",
-        "ЛЬГОТА",
-        "ОРИГИНАЛ ДОКУМЕНТА ОБ ОБРАЗОВАНИИ",
-        "ПРИОРИТЕТ",
-        "ПРОХОДИТЕ ИЛИ НЕ ПРОХОДИТЕ?"] # Start row in all Sheets in excel or text files. Count items in StartRow must be = MaxCountItemsInRow value
+        "Number report",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "Math",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12"] # Start row in all Sheets in excel or text files. Count items in StartRow must be = MaxCountItemsInRow value
 
 ## 
 ##
@@ -60,6 +56,14 @@ StartRow = [
 
 
 
+
+from bs4 import BeautifulSoup
+import requests
+import time
+import pandas as pd
+
+txtFileName = str(time.time_ns())+'_output.txt' # Name txt file
+excelFileName = str(time.time_ns())+'_output'+'.xlsx' # Name exel file
 
 
 cooldown = 0.35 # cooldown 
@@ -101,8 +105,10 @@ def parseHtml(contents,index):
 
     bs = BeautifulSoup(contents,"html.parser") # BeautifulSoup(contents, 'html')
 
-    # Parse table head
+    # Auto parse table head
     if bUseHeaderTable == True:
+        identify = namesFileHtml[index]
+        startData[identify] = RowInfo(identify)
         parseHtmlWithKeys(bs,0,keysTableHead,startData)
 
     # CustomStartRow
@@ -129,7 +135,7 @@ def parseHtmlWithKeys(html, index, keysTable, dictionary):
     
     if index == (len(keysTable)-1): # ['tr','td']
         listRow = []
-        for item in html.find_all(keysTableBody[len(keysTable)-1]):
+        for item in html.find_all(keysTable[len(keysTable)-1]):
             title = item.text
                         
             title = title.strip()
@@ -140,8 +146,6 @@ def parseHtmlWithKeys(html, index, keysTable, dictionary):
     else:
         pos = 0
         for htmlChild in html.find_all(keysTable[index]):
-            if index == 1:
-                print(index, pos)
             parseHtmlWithKeys(htmlChild, index+1, keysTable, dictionary)
             pos += 1
 
@@ -171,14 +175,14 @@ def printFileInTxt(index):
     fw.close()
 
 
-def converterToExelData():
+def converterToExelData(dictionary):
     # data = {class, class}
     # class.data = ['info1', 'info2', 'info3']
 
     # listExel  [ col-x1 = [col-x1y1,col-x1y2,col-x1y3,col-x1y4]]
     #           [ col-x2 = [col-x2y1,col-x2y2,col-x2y3,col-x2y4]]
     listExel = []
-    for clasY in data.values():
+    for clasY in dictionary.values():
         listClass = clasY.data
         listExel.append(clasY.data)
     return listExel
@@ -186,11 +190,12 @@ def converterToExelData():
 dataSheets = []
 def memorySheetsSave(index):
 
-    listExel = converterToExelData()
+    listExel = converterToExelData(data)
     if bUseCustomStartRow == True:
         df = pd.DataFrame(listExel, columns=StartRow) # index=['one', 'two', 'three']
     elif bUseHeaderTable == True:
-        df = pd.DataFrame(listExel, columns=startData[namesFileHtml[index]])
+        startRowExel = converterToExelData(startData)
+        df = pd.DataFrame(listExel, columns=startRowExel)
     else:
         df = pd.DataFrame(listExel)
 
@@ -199,10 +204,17 @@ def memorySheetsSave(index):
 
 def writeSheetsToExcel():
     writer = pd.ExcelWriter(excelFileName, engine='xlsxwriter')
-    index = 0
+    if len(namesSheets) != len(urls):
+        for i in range(len(urls)-len(namesSheets)):
+            namesSheets.append('Sheet_'+str(index))
+
+    index = 0 
     for sheet in dataSheets:
-        if (bUseCustomStartRow == True) and (bUseHeaderTable == True):
-            sheet.to_excel(writer, sheet_name=namesSheets[index],index=False)
+        if (bUseCustomStartRow == True) or (bUseHeaderTable == True):
+            startRowExel = converterToExelData(startData)
+            print(startRowExel)
+            
+            sheet.to_excel(writer, sheet_name=namesSheets[index],index=False, columns=startRowExel[index])
         else:
             sheet.to_excel(writer, sheet_name=namesSheets[index],index=False, columns=None)
         index += 1
@@ -237,7 +249,6 @@ def parseMain():
             memorySheetsSave(index)
             print("[Pass]\tSheet table saved in memory")
 
-        startData.clear() 
         data.clear() 
         
         time.sleep(cooldown)
