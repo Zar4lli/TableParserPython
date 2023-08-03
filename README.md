@@ -41,7 +41,7 @@ In the `HtmlTableParser.py`, edit the following lines:
         "`https://your-target-site.com/table2.html`",
         "`https://your-target-site.com/table3.html`"]
 
-// Enter url addresses where you want to parse the table
+// Enter addresses where you want to parse the table in the urls list
 
 > MainIdentifyPos = `1`
 
@@ -66,7 +66,7 @@ In the `HtmlTableParser.py`, edit the following lines:
         "`downloadHtmlFile2`",
         "`downloadHtmlFile3`"]
 
-// Move the HTML to a folder next to the script. And enter file name (without .html format)
+// Move the HTML to a folder next to the script. And enter file names in the urls list (without .html format)
 
 > MainIdentifyPos = `1`
 
