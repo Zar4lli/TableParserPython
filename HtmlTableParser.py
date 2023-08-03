@@ -3,7 +3,7 @@
 keysTableHead = ["table","thead","tr","th"] # keys to find the head table row
 keysTableBody = ["tr","td"] # keys to find the body table row
 
-MainIdentifyPos = 3 # Main identificator position around  (Started with 1)
+MainIdentifyPos = 1 # Main identificator position around  (Started with 1)
 MaxCountItemsInRow = 15 # Max items in row in parse table
 
 bNetworkHtml = True
