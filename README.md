@@ -4,18 +4,20 @@
 <p align="center"> <img src="https://github.com/Zar4lli/TableParserPython/blob/main/gifMaker.gif" width="100%"> </p>
 
 
-## Install
-To use the script, you need to install [Python](https://www.python.org/downloads/) . Select the following options in the **customizize install**:
-
-> Choose "add python.exe to PATH"
-
-> Choose "pip install"
-
-> Choose "add python to environment variables"
+# Install
+To use the script, you need to install [Python](https://www.python.org/downloads/) . 
+Select the following options in the `CUSTOMIZIZE INSTALL`:
+- Choose `add python.exe to PATH`
+- Choose `pip install`
+- Choose `add python to environment variables`
 
 
 
-After successfully installing python, you need to install packages on the command line: 
+After successfully installing python, you need to install packages. 
+
+Enter these commands on the `Command Prompt`: 
+
+> pip install requests
 
 > pip install beautifulsoup4
 
@@ -23,59 +25,60 @@ After successfully installing python, you need to install packages on the comman
 
 > pip install openpyxl xlsxwriter xlrd
 
-## Configuration 
+# Usage
+## Online Use
+In the `HtmlTableParser.py`, edit the following lines:
 
-The global script settings(config) located in *HtmlTableParser.py*.
-Here are the main settings that will come in handy in your work with this script.
+> bNetworkHtml = `True`
 
->**keysTableHead = ["thead","tr","th"] # Max 3 keys. Needed to looping in tHead table. [items, keys]**
-> <p># These keys are needed for web page parsing (bUseHeaderTable). </p>
-> <p>!! Max 3 keys. !!</p>
+// Switches the script to online parsing mode
 
->**keysTableBody = ["tbody","tr","td"] # Max 3 keys. Needed to looping in tBody table. [items, keys]**
-> <p> These keys are needed for web page parsing. </p>
-> <p>!! Max 3 keys. !!</p>
+> bSaveDataInExcelFormat = `True`
 
-> **MainIdentifyPos = 5**
-> <p> Used to identify each row in a table. </p>
+// Switch to save file to excel spreadsheet
 
-> **MaxCountItemsInRow = 6**
-> <p> Max items in row in parse table </p>
-> <p>!! The value of this parameter must be equal to the number items in row (startRow) </p>
+> urls = ["`https://your-target-site.com/table1.html`",
+        "`https://your-target-site.com/table2.html`",
+        "`https://your-target-site.com/table3.html`"]
 
->**urls = ["https://google.com","https://google.com","https://google.com","https://google.com"]**
-> <p> Links with tables for parsing </p>
+// Enter url addresses where you want to parse the table
 
-> **bSaveHtml = False**
-> <p>Save html's? </p>
+> MainIdentifyPos = `1`
 
-> **namesFileHtml = ["google1","google2","google3","google4"]**
-> <p> Your invented names for web pages (if you enable the download option)   </p>
+// This must be the number of the unique column in the row. which must not be repeated
 
-> **bSaveDataInTxtFormat = False**
-><p>Save out data in txt files?</p>
+> MaxCountItemsInRow = `15`
 
-> **bSaveDataInExcelFormat = True**
-><p>Save out data in exel files? </p>
+ // Enter max count rows in the line
 
-> **namesSheets = ["googleSite1","googleSite2","googleSite3", "googleSite4"]**
-> <p>Your invented names for excel tabs </p>
-> <p>!! Name should be less 31 character !! </p>
+## Ofline Use
+In the `HtmlTableParser.py`, edit the following lines:
 
-> **bUseHeaderTable = True**
-> <p>Whether to use the automatically generated form of the beginning of the table/txt?</p>
+> bNetworkHtml = `False`
 
-> **bUseCustomStartRow = False**
-> <p>Whether to use your custom blank at the beginning of the table/txt?</p>
+// Switches the script to offline parsing mode
 
-> **StartRow = ["№", "id","name", "age","last name", "last seen"]**
-> <p>Start row in all Sheets in excel or text files. </p>
-> <p> !! The number of elements must be equal to MaxCountItemsInRow !!</p>
+> bSaveDataInExcelFormat = `True`
 
+// Switch to save file to excel spreadsheet
 
+> urls = ["`downloadHtmlFile1`",
+        "`downloadHtmlFile2`",
+        "`downloadHtmlFile3`"]
 
+// Move the HTML to a folder next to the script. And enter file name (without .html format)
 
+> MainIdentifyPos = `1`
 
+// This must be the number of the unique column in the row. which must not be repeated
+
+> MaxCountItemsInRow = `15`
+
+// max count rows in the line
+
+## In Future
+
+- Add the ability to combine lists into one table
 
 
 
